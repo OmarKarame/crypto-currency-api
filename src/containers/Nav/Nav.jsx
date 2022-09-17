@@ -6,7 +6,7 @@ const Nav = ({setCards}) => {
     const [negativeChange, setNegativeChange] = useState(false);
     const [priceBelow, setPriceBelow] = useState(false);
 
-    // research a way to create one function to take on the task of the three below
+    // research a way to create one function to take on the task of the three below (use the event keyword)
     const togglePositiveChange = () => {
         setPositiveChange(!positiveChange);
         setCards(positiveChange, negativeChange, priceBelow);
