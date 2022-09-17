@@ -1,5 +1,5 @@
 {
-  "build": "react-scripts build && cp build/index.html build/404.html",
+  "homepage": "https://omarkarame.github.io/crypto-currency-api/",
   "proxy": "https://api.coinranking.com/v2/coins?rapidapi-key=coinrankingadd53d7b222ee7d6ca4c78899be92e33de82aa7191ede888",
   "name": "crypto-currency-api",
   "version": "0.1.0",
