@@ -3,11 +3,13 @@ import Nav from '../Nav/Nav';
 import Card from '../../components/Card/Card';
 import { useState, useEffect } from 'react';
 import mockApi from '../../mockApi';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 const Main = () => {
   const [coins, setCoins] = useState([]);
   const [coinCardsJSX, setCoinCardsJSX] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [priceValue, setPriceValue] = useState(null);
   const [positiveChange, setPositiveChange] = useState(() => false);
   const [negativeChange, setNegativeChange] = useState(() => false);
   const [priceBelow, setPriceBelow] = useState(() => false);
@@ -28,8 +30,8 @@ const Main = () => {
   }, [positiveChange, negativeChange, priceBelow])
 
 
-  const handleCards = (positiveChange, negativeChange, priceBelow, priceValue) => {
-    filterCards(positiveChange, negativeChange, priceBelow, parseFloat(priceValue));
+  const handleCards = (str) => {
+    searchCards(str)
   }
 
   const filterCards = (filterA, filterB, filterC, priceValue) => {
@@ -37,7 +39,6 @@ const Main = () => {
       setCoinCardsJSX(coins.map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
     else if (filterA && filterB && filterC || !filterA && !filterB && filterC) {
-      // filter through the cards based on the value that was inputed in the input box
       setCoinCardsJSX(coins.map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
     else if (filterA && !filterB && !filterC) {
@@ -47,11 +48,16 @@ const Main = () => {
       setCoinCardsJSX(coins.filter((coin) => {return coin.change < 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
 }
+  
+  const searchCards = (searchTerm) => {
+      setCoinCardsJSX(coins.filter((coin) => coin.name.toLowerCase().startsWith(searchTerm.toLowerCase())).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+  }
 
   return (
     <div className='main'>
       {/* add button to open and close nav by using conditional rendering */}
       <Nav positiveChange={positiveChange} setPositiveChange={setPositiveChange}  negativeChange={negativeChange} setNegativeChange={setNegativeChange} priceBelow={priceBelow} setPriceBelow={setPriceBelow}/> 
+      <SearchBar handleCards={handleCards}/>
       {coinCardsJSX}
     </div>
   )
