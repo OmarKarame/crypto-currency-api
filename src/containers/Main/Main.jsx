@@ -6,46 +6,71 @@ import mockApi from '../../mockApi';
 
 const Main = () => {
   const [coins, setCoins] = useState([]);
-  const [coinCardsJSX, setCoinCards] = useState([]);
+  const [coinCardsJSX, setCoinCardsJSX] = useState([]);
+
+  const [positiveChange, setPositiveChange] = useState(() => false);
+  const [negativeChange, setNegativeChange] = useState(() => false);
+  const [priceBelow, setPriceBelow] = useState(() => false);
 
   const getCoins = () => {
     setCoins(mockApi.data.coins);
   }
 
-  // Calls the getCoins function only when the coins array changes (It will only run once)
+  // runs only when coins array changes
   useEffect(() => {
     getCoins()
-    setCards(false, false, false)
+    filterCards(positiveChange, negativeChange, priceBelow)
   }, [coins])
 
-  // use if/else statements to determine which set of cards are displayed (pass the filters states as parameters)
-  const setCards = (filterA, filterB, filterC) => {
-    console.log(filterA);
-    if ((!filterA && !filterB && !filterC) || (filterA, filterB, !filterC)) {
-      setCoinCards(coins.map((coin, index) => {
-        return (
-          <Card 
-            key = {index}
-            symbol={coin.symbol} 
-            name={coin.name}
-            icon={coin.iconUrl}
-            price={coin.price}
-            priceChange={coin.change}
-          />
-        )
-      }))
-    }
+  // runs when a filter is clicked
+  useEffect(() => {
+    filterCards(positiveChange, negativeChange, priceBelow)
+  }, [positiveChange, negativeChange, priceBelow])
+
+
+  const handleCards = (positiveChange, negativeChange, priceBelow, priceValue) => {
+    filterCards(positiveChange, negativeChange, priceBelow, parseFloat(priceValue));
   }
+
+  const filterCards = (filterA, filterB, filterC, priceValue) => {
+    if ((!filterA && !filterB && !filterC) || (filterA && filterB && !filterC)) {
+      setCoinCardsJSX(coins.map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+    }
+    else if (filterA && filterB && filterC || !filterA && !filterB && filterC) {
+      // filter through the cards based on the value that was inputed in the input box
+      setCoinCardsJSX(coins.map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+    }
+    else if (filterA && !filterB && !filterC) {
+      setCoinCardsJSX(coins.filter((coin) => {return coin.change > 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+    }
+    else if (!filterA && filterB && !filterC) {
+      setCoinCardsJSX(coins.filter((coin) => {return coin.change < 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+    }
+}
+
   return (
     <div className='main'>
       {/* add button to open and close nav by using conditional rendering */}
-      <Nav setCards={setCards}/> 
+      <Nav positiveChange={positiveChange} setPositiveChange={setPositiveChange}  negativeChange={negativeChange} setNegativeChange={setNegativeChange} priceBelow={priceBelow} setPriceBelow={setPriceBelow}/> 
       {coinCardsJSX}
     </div>
   )
 }
 
 export default Main
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
