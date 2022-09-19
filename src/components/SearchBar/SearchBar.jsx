@@ -6,7 +6,7 @@ const SearchBar = ({handleCards}) => {
     }
   return (
     <div className='search-bar'>
-        <input type="text" onChange={search}/>
+        <input type="text" onChange={search} placeholder="Search" className="search-bar__input"/>
     </div>
   )
 }
