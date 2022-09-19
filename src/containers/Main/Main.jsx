@@ -44,7 +44,7 @@ const Main = () => {
       setCoinCardsJSX(coins.map((coin, index) => {return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
     else if ((filterA && filterB && filterC && priceValue != '') || (!filterA && !filterB && filterC && priceValue != '')) {
-      setCoinCardsJSX(coins.filter((coin) => {return coin.price < priceValue}).map((coin, index) => {return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+      setCoinCardsJSX(coins.filter((coin) => {return coin.price < parseFloat(priceValue)}).map((coin, index) => {return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
     else if (filterA && !filterB && !filterC) {
       setCoinCardsJSX(coins.filter((coin) => {return coin.change > 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
