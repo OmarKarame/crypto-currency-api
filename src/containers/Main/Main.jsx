@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import mockApi from '../../mockApi';
 import SearchBar from '../../components/SearchBar/SearchBar';
 
-const Main = () => {
+const Main = ({displayNav}) => {
   const [coins, setCoins] = useState([]);
   const [coinCardsJSX, setCoinCardsJSX] = useState([]);
   const [priceValue, setPriceValue] = useState("");
@@ -17,17 +17,14 @@ const Main = () => {
     setCoins(mockApi.data.coins);
   }
 
-  // runs only when coins array changes
   useEffect(() => {
     getCoins()
     filterCards(positiveChange, negativeChange, priceBelow)
   }, [coins])
 
-  // runs when a filter is clicked
   useEffect(() => {
     filterCards(positiveChange, negativeChange, priceBelow, priceValue)
   }, [positiveChange, negativeChange, priceBelow, priceValue])
-
 
   const handleCards = (str) => {
     if (str != "") {
@@ -61,7 +58,7 @@ const Main = () => {
   return (
     <div className='main'>
       {/* add button to open and close nav by using conditional rendering */}
-      <Nav 
+      { displayNav && <Nav 
         positiveChange={positiveChange} 
         setPositiveChange={setPositiveChange}  
         negativeChange={negativeChange} 
@@ -69,7 +66,7 @@ const Main = () => {
         priceBelow={priceBelow} 
         setPriceBelow={setPriceBelow}
         setPriceValue={setPriceValue}
-        /> 
+        /> }
       <SearchBar handleCards={handleCards}/>
       {coinCardsJSX}
     </div>
@@ -95,7 +92,7 @@ export default Main
 
 
 
-// Failed api call
+// Failed api call (unable to grant access to local host (CORS))
 
   // const [url, setUrl] = useState("https://api.coinranking.com/v2/coins?rapidapi-key=coinrankingadd53d7b222ee7d6ca4c78899be92e33de82aa7191ede888");
   

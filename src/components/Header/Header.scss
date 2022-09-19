@@ -1,0 +1,30 @@
+@use '../../assets/sass/variables' as *;
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.header{
+    width: 100%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1.5rem 0rem;
+    button{
+        font-size: 1.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+    }
+    &__filters{
+        background-color: black;
+        color: white;
+        border: none;
+    }
+    &__close{
+        background-color: white;
+        color: black;
+        border: 0.11rem solid black;
+    }
+}
