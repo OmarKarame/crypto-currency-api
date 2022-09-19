@@ -13,9 +13,7 @@ const Main = ({displayNav}) => {
   const [negativeChange, setNegativeChange] = useState(() => false);
   const [priceBelow, setPriceBelow] = useState(() => false);
 
-  const getCoins = () => {
-    setCoins(mockApi.data.coins);
-  }
+  const getCoins = () => setCoins(mockApi.data.coins);
 
   useEffect(() => {
     getCoins()
@@ -43,17 +41,21 @@ const Main = ({displayNav}) => {
     else if ((filterA && filterB && filterC && priceValue != '') || (!filterA && !filterB && filterC && priceValue != '')) {
       setCoinCardsJSX(coins.filter((coin) => {return coin.price < parseFloat(priceValue)}).map((coin, index) => {return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
-    else if (filterA && !filterB && !filterC) {
+    else if (filterA && !filterB && filterC && priceValue != '') {
+      setCoinCardsJSX(coins.filter((coin) => {return coin.change > 0 && coin.price < parseFloat(priceValue)}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+    }
+    else if (!filterA && filterB && filterC && priceValue != '') {
+      setCoinCardsJSX(coins.filter((coin) => {return coin.change < 0 && coin.price < parseFloat(priceValue)}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+    }
+    else if ((filterA && !filterB && !filterC) || (filterA && !filterB && filterC && priceValue == '')) {
       setCoinCardsJSX(coins.filter((coin) => {return coin.change > 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
-    else if (!filterA && filterB && !filterC) {
+    else if ((!filterA && filterB && !filterC) || (!filterA && filterB && filterC && priceValue == '')) {
       setCoinCardsJSX(coins.filter((coin) => {return coin.change < 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
 }
   
-  const searchCards = (searchTerm) => {
-      setCoinCardsJSX(coinCardsJSX.filter((coinCard) => coinCard.props.name.toLowerCase().startsWith(searchTerm.toLowerCase())).map((coinCard, index) => { return <Card key = {index} symbol={coinCard.props.symbol} name={coinCard.props.name} icon={coinCard.props.icon} price={coinCard.props.price} priceChange={coinCard.props.priceChange}/>}))
-  }
+  const searchCards = (searchTerm) => setCoinCardsJSX(coinCardsJSX.filter((coinCard) => coinCard.props.name.toLowerCase().startsWith(searchTerm.toLowerCase())).map((coinCard, index) => { return <Card key = {index} symbol={coinCard.props.symbol} name={coinCard.props.name} icon={coinCard.props.icon} price={coinCard.props.price} priceChange={coinCard.props.priceChange}/>}))
 
   return (
     <div className='main'>
