@@ -36,7 +36,7 @@ const Nav = (props) => {
             <label htmlFor="negative-change">Coins that are decreasing in value</label>
         </div>
         <div className='price-below'>
-            <input type="text" onChange={togglePriceValue}/>
+            <input type="text" className="search-box" placeholder="Below value..." onChange={togglePriceValue}/>
             <button value="price-below__search" onClick={toggleChange}>Search</button>
             <button value="price-below__stop" onClick={toggleChange}>Stop</button>
         </div>
