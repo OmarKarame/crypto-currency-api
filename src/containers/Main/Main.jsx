@@ -8,8 +8,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 const Main = () => {
   const [coins, setCoins] = useState([]);
   const [coinCardsJSX, setCoinCardsJSX] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [priceValue, setPriceValue] = useState(null);
+  const [priceValue, setPriceValue] = useState("");
   const [positiveChange, setPositiveChange] = useState(() => false);
   const [negativeChange, setNegativeChange] = useState(() => false);
   const [priceBelow, setPriceBelow] = useState(() => false);
@@ -26,8 +25,8 @@ const Main = () => {
 
   // runs when a filter is clicked
   useEffect(() => {
-    filterCards(positiveChange, negativeChange, priceBelow)
-  }, [positiveChange, negativeChange, priceBelow])
+    filterCards(positiveChange, negativeChange, priceBelow, priceValue)
+  }, [positiveChange, negativeChange, priceBelow, priceValue])
 
 
   const handleCards = (str) => {
@@ -35,16 +34,17 @@ const Main = () => {
       searchCards(str)
     }
     else {
-      filterCards(positiveChange, negativeChange, priceBelow)
+      filterCards(positiveChange, negativeChange, priceBelow, priceValue)
     }
   }
 
   const filterCards = (filterA, filterB, filterC, priceValue) => {
-    if ((!filterA && !filterB && !filterC) || (filterA && filterB && !filterC)) {
+    console.log(filterC, priceValue);
+    if ((!filterA && !filterB && !filterC) || (filterA && filterB && !filterC) || (filterA && filterB && filterC && priceValue == '') || (!filterA && !filterB && filterC && priceValue == '')) {
       setCoinCardsJSX(coins.map((coin, index) => {return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
-    else if (filterA && filterB && filterC || !filterA && !filterB && filterC) {
-      setCoinCardsJSX(coins.map((coin, index) => {return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
+    else if ((filterA && filterB && filterC && priceValue != '') || (!filterA && !filterB && filterC && priceValue != '')) {
+      setCoinCardsJSX(coins.filter((coin) => {return coin.price < priceValue}).map((coin, index) => {return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
     else if (filterA && !filterB && !filterC) {
       setCoinCardsJSX(coins.filter((coin) => {return coin.change > 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
@@ -52,7 +52,6 @@ const Main = () => {
     else if (!filterA && filterB && !filterC) {
       setCoinCardsJSX(coins.filter((coin) => {return coin.change < 0}).map((coin, index) => { return <Card key = {index} symbol={coin.symbol} name={coin.name} icon={coin.iconUrl} price={coin.price} priceChange={coin.change}/>}))
     }
-    console.log(coinCardsJSX);
 }
   
   const searchCards = (searchTerm) => {
@@ -62,7 +61,15 @@ const Main = () => {
   return (
     <div className='main'>
       {/* add button to open and close nav by using conditional rendering */}
-      <Nav positiveChange={positiveChange} setPositiveChange={setPositiveChange}  negativeChange={negativeChange} setNegativeChange={setNegativeChange} priceBelow={priceBelow} setPriceBelow={setPriceBelow}/> 
+      <Nav 
+        positiveChange={positiveChange} 
+        setPositiveChange={setPositiveChange}  
+        negativeChange={negativeChange} 
+        setNegativeChange={setNegativeChange} 
+        priceBelow={priceBelow} 
+        setPriceBelow={setPriceBelow}
+        setPriceValue={setPriceValue}
+        /> 
       <SearchBar handleCards={handleCards}/>
       {coinCardsJSX}
     </div>

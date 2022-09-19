@@ -2,7 +2,7 @@ import './Nav.scss';
 import { useState, useEffect } from 'react';
 
 const Nav = (props) => {
-    const {positiveChange, setPositiveChange, negativeChange, setNegativeChange, priceBelow, setPriceBelow} = props;
+    const {positiveChange, setPositiveChange, negativeChange, setNegativeChange, priceBelow, setPriceBelow, setPriceValue} = props;
 
     const toggleChange = (event) => {
         if (event.target.value == "positive-change") {
@@ -10,6 +10,18 @@ const Nav = (props) => {
         }
         else if (event.target.value == "negative-change") {
             setNegativeChange(!negativeChange);
+        }
+        else if (event.target.value == "price-below__search"){
+            setPriceBelow(true);
+        }
+        else if (event.target.value == "price-below__stop"){
+            setPriceBelow(false);
+        }
+    }
+
+    const togglePriceValue = (event) => {
+        if (priceBelow) {
+            setPriceValue(event.target.value);
         }
     }
 
@@ -23,7 +35,11 @@ const Nav = (props) => {
             <input type="checkbox" className='negative-change__input' value="negative-change" onClick={toggleChange}/>
             <label htmlFor="negative-change">Coins that are decreasing in value</label>
         </div>
-        {/* Add search bar, a button to filter, and a button to reset */}
+        <div className='price-below'>
+            <input type="text" onChange={togglePriceValue}/>
+            <button value="price-below__search" onClick={toggleChange}>Search</button>
+            <button value="price-below__stop" onClick={toggleChange}>Stop</button>
+        </div>
     </div>
   )
 }
