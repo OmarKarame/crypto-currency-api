@@ -19,7 +19,7 @@ const Card = (props) => {
     <div className='card'>
         <h2>{symbol}</h2>
         <img src={icon} alt="icons" width={100} className=""/>
-        <h2 className='coin-name'>{name}</h2>
+        <h2 className='card__coin-name'>{name}</h2>
         <div className='card__price-info'>
             <h3>Price: ${roundedPrice}</h3>
             <h3 className={`card__price-change${priceChangeClassName}`}>{priceChange}%</h3>
